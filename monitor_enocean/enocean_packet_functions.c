@@ -137,6 +137,7 @@ void slave_delete(Slave *slave)
  * \param data The data to send to the slave
  * \param size The length of the data to send
  * \brief Writes datas on slave's socket
+ * \return -1 if fails to write on socket, 0 otherwise
  */
 int slave_send_data(Slave *slave, void *data, int size)
 {
@@ -294,8 +295,9 @@ Enocean_packet create_packet(uint8_t *buffer, uint16_t data_len, uint8_t opt_dat
   Enocean_packet res;
 
   memset(&res, 0, sizeof(res));
+  res.data = malloc(255);
   res.sync_byte = buffer[0];
-  res.header.data_length = data_len - 6;
+  res.header.data_length = data_len;
   res.header.opt_data_length = opt_data_len;
   res.header.packet_type = packet_type;
   res.CRC8H = buffer[5];
